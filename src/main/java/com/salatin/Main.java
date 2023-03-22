@@ -4,15 +4,20 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.Random;
+import java.util.TreeMap;
 
 public class Main {
-    static final long TIME_WINDOW_SIZE = 10;
+    static final long TIME_WINDOW_SIZE = 1000;
 
     static Deque<Double> askPrices = new ArrayDeque<>();
     static Deque<Double> bidPrices = new ArrayDeque<>();
     static Deque<Long> timeStamps = new ArrayDeque<>();
+
+    static TreeMap<Double, Integer> askBook = new TreeMap<>();
+    static TreeMap<Double, Integer> bidBook = new TreeMap<>(Collections.reverseOrder());
 
     public static void main(String[] args) {
         String inputFile = "/Users/ssalatin/Downloads/BRENT-prepared.csv";
@@ -40,6 +45,29 @@ public class Main {
                 timeStamps.addFirst(currentTimeStamp);
                 askPrices.addFirst(ask);
                 bidPrices.addFirst(bid);
+
+                //top of book filling
+                if (askBook.containsKey(ask)) {
+                    int existingVolume = askBook.get(ask);
+                    askBook.put(ask, existingVolume + askVolume);
+
+                    askBook.headMap(ask).clear();
+                } else {
+                    askBook.put(ask, askVolume);
+
+                    askBook.headMap(ask).clear();
+                }
+
+                if (bidBook.containsKey(bid)) {
+                    int existingVolume = bidBook.get(bid);
+                    bidBook.put(bid, existingVolume + bidVolume);
+
+                    bidBook.headMap(bid).clear();
+                } else {
+                    bidBook.put(bid, bidVolume);
+
+                    bidBook.headMap(bid).clear();
+                }
 
                 if (startTimeWindow > startProcessingTime) {
                     clearOldData(startTimeWindow);
@@ -104,8 +132,10 @@ public class Main {
         long oldestTimeStamp = timeStamps.getLast();
         while (oldestTimeStamp < startOfTimeWindow) {
             timeStamps.removeLast();
-            askPrices.removeLast();
-            bidPrices.removeLast();
+            var removedAsk = askPrices.removeLast();
+            askBook.remove(removedAsk);
+            var removedBid = bidPrices.removeLast();
+            bidBook.remove(removedBid);
 
             oldestTimeStamp = timeStamps.getLast();
         }
