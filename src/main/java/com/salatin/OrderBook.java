@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MarketBook {
-    private static final short OUTPUT_SIZE = 15;
-    private final float TICK_STEP = 0.001f;
+public class OrderBook {
+    private static final float TICK_STEP = 0.001f;
+
     private final TreeMap<Double, Integer> askBook = new TreeMap<>();
     private final TreeMap<Double, Integer> bidBook = new TreeMap<>(Collections.reverseOrder());
 
@@ -27,13 +27,25 @@ public class MarketBook {
         return 0;
     }
 
-    public String outBookState() {
+    public double getBidAskImbalance() {
+        int bidVolume = bidBook.firstEntry().getValue();
+        int askVolume = askBook.firstEntry().getValue();
+
+        return (double) bidVolume / (bidVolume + askVolume);
+    }
+
+    /**
+     * @param depthSize a depth of one side of the order book
+     * @return a String formatted snippet of a current state of the order book
+     */
+
+    public String getMarketDepthSnapshot(short depthSize) {
         StringBuilder builder = new StringBuilder();
         builder.append("BID\t\tPRICE\t\tASK");
         builder.append(System.lineSeparator());
 
         List< Map.Entry<Double, Integer>> askEntries = new ArrayList<>(askBook.entrySet().stream()
-            .limit(OUTPUT_SIZE)
+            .limit(depthSize)
             .toList());
 
         Collections.reverse(askEntries);
@@ -43,7 +55,7 @@ public class MarketBook {
                 builder.append(System.lineSeparator());
             });
 
-        bidBook.entrySet().stream().limit(OUTPUT_SIZE)
+        bidBook.entrySet().stream().limit(depthSize)
             .forEach(bid -> {
             builder.append(bid.getValue()).append("\t\t").append(bid.getKey());
             builder.append(System.lineSeparator());
