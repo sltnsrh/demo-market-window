@@ -20,6 +20,6 @@ public class TickProcessor {
         twap.collectPrices(tick.ask(), tick.bid());
         marketBook.update(tick);
 
-        twap.output(startProcessingTime);
+        System.out.println(twap.output(startProcessingTime));
     }
 }
