@@ -50,6 +50,8 @@ public class Twap {
 
             if (!timeStamps.isEmpty()) {
                 oldestTimeStamp = timeStamps.getLast();
+            } else {
+                return;
             }
         }
     }
