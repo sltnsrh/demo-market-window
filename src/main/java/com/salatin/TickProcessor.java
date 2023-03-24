@@ -1,5 +1,7 @@
 package com.salatin;
 
+import com.salatin.util.MetricsCalculator;
+
 public class TickProcessor {
     private final Twap twap;
 
@@ -30,16 +32,10 @@ public class TickProcessor {
 
         System.out.printf(
             "%s: Bid: %.3f\t%d\t\tAsk: %.3f\t%d\t\tSpread: %d\t\tImbalance: %.2f\t\tTWAP: Bid: %.3f\tAsk: %.3f%n",
-            ticker, bid, bidVolume, ask, askVolume, spread(bid, ask), bidAskImbalance(bidVolume, askVolume),
+            ticker, bid, bidVolume, ask, askVolume,
+            MetricsCalculator.spread(bid, ask),
+            MetricsCalculator.bidAskImbalance(bidVolume, askVolume),
             twap.bid(), twap.ask()
         );
-    }
-
-    private double bidAskImbalance(int bidVolume, int askVolume) {
-        return (double) bidVolume / (bidVolume + askVolume);
-    }
-
-    private int spread(double bid, double ask) {
-        return (int) ((ask - bid) / 0.001);
     }
 }
