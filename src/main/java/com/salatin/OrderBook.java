@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class OrderBook {
-    private static final float TICK_STEP = 0.001f;
-
     private final TreeMap<Double, Integer> askBook = new TreeMap<>();
     private final TreeMap<Double, Integer> bidBook = new TreeMap<>(Collections.reverseOrder());
 
@@ -18,20 +16,6 @@ public class OrderBook {
 
         bidBook.put(tick.bid(), tick.bidVolume());
         bidBook.headMap(tick.bid()).clear();
-    }
-
-    public int getSpread() {
-        if (!askBook.isEmpty() && !bidBook.isEmpty()) {
-            return (int) ((askBook.firstKey() - bidBook.firstKey()) / TICK_STEP);
-        }
-        return 0;
-    }
-
-    public double getBidAskImbalance() {
-        int bidVolume = bidBook.firstEntry().getValue();
-        int askVolume = askBook.firstEntry().getValue();
-
-        return (double) bidVolume / (bidVolume + askVolume);
     }
 
     /**

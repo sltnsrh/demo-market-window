@@ -29,7 +29,7 @@ public class CsvStream implements DataStream {
 
                 tickProcessor.process(tick);
 
-                Thread.sleep(random.nextInt(10));
+                Thread.sleep(random.nextInt(50));
             }
 
         } catch (IOException e) {

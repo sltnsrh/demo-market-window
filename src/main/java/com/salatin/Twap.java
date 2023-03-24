@@ -22,19 +22,17 @@ public class Twap {
         bidPrices.addFirst(bid);
     }
 
-    public String output(long startProcessingTime) {
+    public TickTwap output(long startProcessingTime) {
         boolean timeWindowStarted =
             (System.currentTimeMillis() - windowSizeMs) > startProcessingTime;
 
         if (timeWindowStarted) {
             clearOutOfWindowData();
 
-            TickTwap result = createTickTwap();
-
-            return String.format("Ask: %.3f Bid: %.3f", result.ask(), result.bid());
+            return createTickTwap();
         }
 
-        return "No TWAP data";
+        return new TickTwap(0, 0);
     }
 
     private void clearOutOfWindowData() {

@@ -1,13 +1,11 @@
 package com.salatin;
 
 public class TickProcessor {
-    private final MarketBook marketBook;
     private final Twap twap;
 
     private long startProcessingTime;
 
-    public TickProcessor(MarketBook marketBook, Twap twap) {
-        this.marketBook = marketBook;
+    public TickProcessor(Twap twap) {
         this.twap = twap;
         this.startProcessingTime = 0;
     }
@@ -18,8 +16,30 @@ public class TickProcessor {
         }
 
         twap.collectPrices(tick.ask(), tick.bid());
-        marketBook.update(tick);
+        TickTwap tickTwap = twap.output(startProcessingTime);
 
-        System.out.println(twap.output(startProcessingTime));
+        outProcessedData(tick, tickTwap);
+    }
+
+    private void outProcessedData(Tick tick, TickTwap twap) {
+        double bid = tick.bid();
+        int bidVolume = tick.bidVolume();
+        double ask = tick.ask();
+        int askVolume = tick.askVolume();
+        String ticker = tick.ticker();
+
+        System.out.printf(
+            "%s: Bid: %.3f\t%d\t\tAsk: %.3f\t%d\t\tSpread: %d\t\tImbalance: %.2f\t\tTWAP: Bid: %.3f\tAsk: %.3f%n",
+            ticker, bid, bidVolume, ask, askVolume, spread(bid, ask), bidAskImbalance(bidVolume, askVolume),
+            twap.bid(), twap.ask()
+        );
+    }
+
+    private double bidAskImbalance(int bidVolume, int askVolume) {
+        return (double) bidVolume / (bidVolume + askVolume);
+    }
+
+    private int spread(double bid, double ask) {
+        return (int) ((ask - bid) / 0.001);
     }
 }
