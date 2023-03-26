@@ -1,4 +1,4 @@
-package com.salatin;
+package com.salatin.model;
 
 public record Tick (
     String ticker,

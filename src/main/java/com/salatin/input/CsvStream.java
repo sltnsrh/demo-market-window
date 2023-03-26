@@ -1,6 +1,6 @@
 package com.salatin.input;
 
-import com.salatin.Tick;
+import com.salatin.model.Tick;
 import com.salatin.TickProcessor;
 import com.salatin.util.LineParser;
 import java.io.BufferedReader;
@@ -24,18 +24,20 @@ public class CsvStream implements DataStream {
             String line;
             Random random = new Random();
 
+            long startingTime = System.currentTimeMillis();
+
             while ((line = reader.readLine()) != null) {
                 Tick tick = LineParser.getTickData(line);
 
                 tickProcessor.process(tick);
-
-                Thread.sleep(random.nextInt(50));
+                //Used for simulation of real-time ticks supplying
+//                Thread.sleep(random.nextInt(50));
             }
+
+            System.out.println("Completed. General execution time, ms: " + (System.currentTimeMillis() - startingTime));
 
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
     }
 }

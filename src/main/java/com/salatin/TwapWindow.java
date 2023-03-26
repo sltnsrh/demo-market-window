@@ -1,22 +1,25 @@
 package com.salatin;
 
+import com.salatin.model.Twap;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class TwapCalculator {
+public class TwapWindow {
+    private final long startProcessingTime;
     private final long windowSizeMs;
     private final Deque<Double> askPrices;
     private final Deque<Double> bidPrices;
     private final Deque<Long> timeStamps;
 
-    public TwapCalculator(long windowSizeMs) {
+    public TwapWindow(long startProcessingTime, long windowSizeMs) {
+        this.startProcessingTime = startProcessingTime;
         this.windowSizeMs = windowSizeMs;
         this.askPrices = new ArrayDeque<>();
         this.bidPrices = new ArrayDeque<>();
         this.timeStamps = new ArrayDeque<>();
     }
 
-    public Twap calculate(long startProcessingTime, double bid, double ask) {
+    public Twap calculateCurrentTick(double bid, double ask) {
         collectPrices(ask, bid);
 
         boolean timeWindowStarted =

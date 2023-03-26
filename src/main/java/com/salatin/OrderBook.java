@@ -1,5 +1,6 @@
 package com.salatin;
 
+import com.salatin.model.Tick;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

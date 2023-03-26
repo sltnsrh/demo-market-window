@@ -8,8 +8,8 @@ public class Main {
     public static final long TIME_WINDOW_SIZE = 10000;
 
     public static void main(String[] args) {
-        TwapCalculator twapCalculator = new TwapCalculator(TIME_WINDOW_SIZE);
-        TickProcessor tickProcessor = new TickProcessor(twapCalculator);
+        TwapWindow twapWindow = new TwapWindow(System.currentTimeMillis(), TIME_WINDOW_SIZE);
+        TickProcessor tickProcessor = new TickProcessor(twapWindow);
         DataStream dataStream = new CsvStream(INPUT_FILE, tickProcessor);
 
         dataStream.start();

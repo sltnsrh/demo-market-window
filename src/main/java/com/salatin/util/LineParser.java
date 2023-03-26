@@ -1,6 +1,6 @@
 package com.salatin.util;
 
-import com.salatin.Tick;
+import com.salatin.model.Tick;
 
 public class LineParser {
     private static final short TICKER_INDEX = 0;
