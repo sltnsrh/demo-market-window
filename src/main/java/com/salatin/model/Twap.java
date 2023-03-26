@@ -1,3 +1,5 @@
 package com.salatin.model;
 
-public record Twap(double ask, double bid) {}
+import java.math.BigDecimal;
+
+public record Twap(BigDecimal ask, BigDecimal bid) {}

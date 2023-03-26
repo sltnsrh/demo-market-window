@@ -1,14 +1,15 @@
 package com.salatin;
 
 import com.salatin.model.Twap;
+import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class TwapWindow {
     private final long startProcessingTime;
     private final long windowSizeMs;
-    private final Deque<Double> askPrices;
-    private final Deque<Double> bidPrices;
+    private final Deque<BigDecimal> askPrices;
+    private final Deque<BigDecimal> bidPrices;
     private final Deque<Long> timeStamps;
 
     public TwapWindow(long startProcessingTime, long windowSizeMs) {
@@ -19,7 +20,7 @@ public class TwapWindow {
         this.timeStamps = new ArrayDeque<>();
     }
 
-    public Twap calculateCurrentTick(double bid, double ask) {
+    public Twap calculateCurrentTick(BigDecimal bid, BigDecimal ask) {
         collectPrices(ask, bid);
 
         boolean timeWindowStarted =
@@ -31,10 +32,10 @@ public class TwapWindow {
             return createTickTwap();
         }
 
-        return new Twap(0, 0);
+        return new Twap(BigDecimal.ZERO, BigDecimal.ZERO);
     }
 
-    private void collectPrices(double bid, double ask) {
+    private void collectPrices(BigDecimal bid, BigDecimal ask) {
         timeStamps.addFirst(System.currentTimeMillis());
         bidPrices.addFirst(bid);
         askPrices.addFirst(ask);
@@ -67,8 +68,8 @@ public class TwapWindow {
         var bidPricesIterator = bidPrices.iterator();
 
         long prevTimeStamp = 0;
-        double sumAsksDeltas = 0;
-        double sumBidsDeltas = 0;
+        BigDecimal sumAsksDeltas = BigDecimal.valueOf(0);
+        BigDecimal sumBidsDeltas = BigDecimal.valueOf(0);
 
         while (
             timeStampsIterator.hasNext()
@@ -86,15 +87,15 @@ public class TwapWindow {
             long deltaTime = Math.abs(currentTime - prevTimeStamp);
             prevTimeStamp = currentTime;
 
-            double askPrice = askPricesIterator.next();
-            double bidPrice = bidPricesIterator.next();
+            BigDecimal askPrice = askPricesIterator.next();
+            BigDecimal bidPrice = bidPricesIterator.next();
 
-            sumAsksDeltas += askPrice * deltaTime;
-            sumBidsDeltas += bidPrice * deltaTime;
+            sumAsksDeltas.add(askPrice.multiply(BigDecimal.valueOf(deltaTime)));
+            sumBidsDeltas.add(bidPrice.multiply(BigDecimal.valueOf(deltaTime)));
         }
 
-        double askTwap = sumAsksDeltas / windowSizeMs;
-        double bidTwap = sumBidsDeltas / windowSizeMs;
+        BigDecimal askTwap = sumAsksDeltas.divide(BigDecimal.valueOf(windowSizeMs));
+        BigDecimal bidTwap = sumBidsDeltas.divide(BigDecimal.valueOf(windowSizeMs));
 
         return new Twap(askTwap, bidTwap);
     }

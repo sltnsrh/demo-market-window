@@ -1,9 +1,11 @@
 package com.salatin.model;
 
+import java.math.BigDecimal;
+
 public record Tick (
     String ticker,
-    double bid,
+    BigDecimal bid,
     int bidVolume,
-    double ask,
+    BigDecimal ask,
     int askVolume
 ) {}

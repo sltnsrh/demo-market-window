@@ -3,6 +3,7 @@ package com.salatin;
 import com.salatin.model.Tick;
 import com.salatin.model.Twap;
 import com.salatin.util.MetricsCalculator;
+import java.math.BigDecimal;
 
 public class TickProcessor {
     private final TwapWindow twapWindow;
@@ -13,9 +14,9 @@ public class TickProcessor {
 
     public void process(Tick tick) {
 
-        double bid = tick.bid();
+        BigDecimal bid = tick.bid();
         int bidVolume = tick.bidVolume();
-        double ask = tick.ask();
+        BigDecimal ask = tick.ask();
         int askVolume = tick.askVolume();
         String ticker = tick.ticker();
 

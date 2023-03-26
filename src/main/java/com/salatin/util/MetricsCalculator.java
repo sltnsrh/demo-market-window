@@ -1,8 +1,9 @@
 package com.salatin.util;
 
-public final class MetricsCalculator {
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-    private static final double TICK_SIZE = 0.001;
+public final class MetricsCalculator {
 
     private MetricsCalculator() {}
 
@@ -10,7 +11,14 @@ public final class MetricsCalculator {
         return (double) bidVolume / (bidVolume + askVolume);
     }
 
-    public static int spread(double bid, double ask) {
-        return (int) Math.round((ask - bid) / TICK_SIZE);
+    public static int spread(BigDecimal bid, BigDecimal ask) {
+        int scale = Math.max(bid.scale(), ask.scale());
+
+        BigDecimal tickSize = BigDecimal.valueOf(Math.pow(0.1, scale))
+            .setScale(scale, RoundingMode.HALF_UP);
+
+        return ask.subtract(bid)
+            .divide(tickSize, RoundingMode.HALF_UP)
+            .intValue();
     }
 }

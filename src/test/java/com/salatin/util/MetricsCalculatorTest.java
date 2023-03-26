@@ -2,6 +2,7 @@ package com.salatin.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 
 class MetricsCalculatorTest {
@@ -19,8 +20,8 @@ class MetricsCalculatorTest {
 
     @Test
     void spreadWithValidPricesExpectCorrectSpread() {
-        double bid = 0.001;
-        double ask = 0.010;
+        BigDecimal bid = BigDecimal.valueOf(0.001);
+        BigDecimal ask = BigDecimal.valueOf(0.010);
         int expected = 9;
 
         int actual = MetricsCalculator.spread(bid, ask);
