@@ -12,7 +12,7 @@ public class TickProcessor {
         this.twapWindow = twapWindow;
     }
 
-    public void process(Tick tick) {
+    public void processAndOut(Tick tick) {
 
         BigDecimal bid = tick.bid();
         int bidVolume = tick.bidVolume();
