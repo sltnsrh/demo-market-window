@@ -29,7 +29,9 @@ public class CsvStream implements DataStream {
             while ((line = reader.readLine()) != null) {
                 Tick tick = LineParser.getTickData(line);
 
-                tickProcessor.processAndOut(tick);
+                if (tick != null) {
+                    tickProcessor.processAndOut(tick);
+                }
                 //Used for simulation of real-time ticks supplying
 //                Thread.sleep(random.nextInt(50));
             }
