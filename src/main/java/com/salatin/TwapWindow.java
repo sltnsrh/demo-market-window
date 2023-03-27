@@ -22,7 +22,7 @@ public class TwapWindow {
     }
 
     public Twap calculateCurrentTick(BigDecimal bid, BigDecimal ask) {
-        collectPrices(ask, bid);
+        collectPrices(bid, ask);
 
         boolean timeWindowStarted =
             (System.currentTimeMillis() - windowSizeMs) > startProcessingTime;
@@ -30,7 +30,9 @@ public class TwapWindow {
         if (timeWindowStarted) {
             clearOutOfWindowData();
 
-            return createTickTwap();
+            if(timeStamps.size() > 1) {
+                return createTickTwap();
+            }
         }
 
         return new Twap(BigDecimal.ZERO, BigDecimal.ZERO);
@@ -43,30 +45,22 @@ public class TwapWindow {
     }
 
     private void clearOutOfWindowData() {
-        if (timeStamps.isEmpty()) {
-            return;
-        }
 
-        long oldestTimeStamp = timeStamps.getLast();
-        long windowStartTime = System.currentTimeMillis() - windowSizeMs;
-
-        while (oldestTimeStamp < windowStartTime) {
+        while ((timeStamps.getFirst() - timeStamps.getLast()) > windowSizeMs) {
             timeStamps.removeLast();
             askPrices.removeLast();
             bidPrices.removeLast();
-
-            if (!timeStamps.isEmpty()) {
-                oldestTimeStamp = timeStamps.getLast();
-            } else {
-                return;
-            }
         }
     }
 
     private Twap createTickTwap() {
-        var timeStampsIterator = timeStamps.iterator();
-        var askPricesIterator = askPrices.iterator();
-        var bidPricesIterator = bidPrices.iterator();
+        if (timeStamps.size() < 2) {
+            return new Twap(BigDecimal.ZERO, BigDecimal.ZERO);
+        }
+
+        var timeStampsIterator = timeStamps.descendingIterator();
+        var askPricesIterator = askPrices.descendingIterator();
+        var bidPricesIterator = bidPrices.descendingIterator();
 
         long prevTimeStamp = 0;
         BigDecimal sumAsksDeltas = BigDecimal.valueOf(0);
@@ -77,22 +71,22 @@ public class TwapWindow {
                 && askPricesIterator.hasNext()
                 && bidPricesIterator.hasNext()
         ) {
+            long deltaTime;
+            long currentTime = timeStampsIterator.next();
+
             if (prevTimeStamp == 0) {
-                prevTimeStamp = timeStampsIterator.next();
-                askPricesIterator.next();
-                bidPricesIterator.next();
-                continue;
+                deltaTime = (timeStamps.getFirst() - timeStamps.getLast()) / (timeStamps.size() - 1);
+            } else {
+                deltaTime = Math.abs(currentTime - prevTimeStamp);
             }
 
-            long currentTime = timeStampsIterator.next();
-            long deltaTime = Math.abs(currentTime - prevTimeStamp);
             prevTimeStamp = currentTime;
 
             BigDecimal askPrice = askPricesIterator.next();
             BigDecimal bidPrice = bidPricesIterator.next();
 
-            sumAsksDeltas.add(askPrice.multiply(BigDecimal.valueOf(deltaTime)));
-            sumBidsDeltas.add(bidPrice.multiply(BigDecimal.valueOf(deltaTime)));
+            sumAsksDeltas = sumAsksDeltas.add(askPrice.multiply(BigDecimal.valueOf(deltaTime)));
+            sumBidsDeltas = sumBidsDeltas.add(bidPrice.multiply(BigDecimal.valueOf(deltaTime)));
         }
 
         BigDecimal askTwap = sumAsksDeltas
