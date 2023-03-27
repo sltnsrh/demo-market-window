@@ -2,6 +2,7 @@ package com.salatin;
 
 import com.salatin.model.Twap;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -94,8 +95,10 @@ public class TwapWindow {
             sumBidsDeltas.add(bidPrice.multiply(BigDecimal.valueOf(deltaTime)));
         }
 
-        BigDecimal askTwap = sumAsksDeltas.divide(BigDecimal.valueOf(windowSizeMs));
-        BigDecimal bidTwap = sumBidsDeltas.divide(BigDecimal.valueOf(windowSizeMs));
+        BigDecimal askTwap = sumAsksDeltas
+            .divide(BigDecimal.valueOf(windowSizeMs), RoundingMode.HALF_UP);
+        BigDecimal bidTwap = sumBidsDeltas
+            .divide(BigDecimal.valueOf(windowSizeMs), RoundingMode.HALF_UP);
 
         return new Twap(askTwap, bidTwap);
     }

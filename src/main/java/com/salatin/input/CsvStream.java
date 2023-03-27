@@ -22,7 +22,7 @@ public class CsvStream implements DataStream {
         try (BufferedReader reader = new BufferedReader(new FileReader(inputPath))) {
 
             String line;
-            Random random = new Random();
+//            Random random = new Random();
 
             long startingTime = System.currentTimeMillis();
 
