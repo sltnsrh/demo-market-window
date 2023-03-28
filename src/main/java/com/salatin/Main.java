@@ -5,7 +5,7 @@ import com.salatin.input.DataStream;
 
 public class Main {
     public static final String INPUT_FILE = "src/main/resources/BRENT-tick-data-input.csv";
-    public static final long TIME_WINDOW_SIZE = 10000;
+    public static final long TIME_WINDOW_SIZE = 1000;
 
     public static void main(String[] args) {
         TwapWindow twapWindow = new TwapWindow(System.currentTimeMillis(), TIME_WINDOW_SIZE);
