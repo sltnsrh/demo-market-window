@@ -30,13 +30,13 @@ public class LineParser {
             ask = new BigDecimal(fields[ASK_INDEX]);
             askVolume = Integer.parseInt(fields[ASK_VOLUME_INDEX]);
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-            logger.log(Level.WARNING, "Incorrect input data: " + line);
+            logger.log(Level.WARNING, () -> "Incorrect input data: " + line);
 
             return null;
         }
 
         if (ask.compareTo(bid) <= 0) {
-            logger.log(Level.WARNING, "Bad input data, ask can't be less or equal bid.: " + line);
+            logger.log(Level.WARNING, () -> "Bad input data, ask can't be less or equal bid.: " + line);
 
             return null;
         }
@@ -45,13 +45,13 @@ public class LineParser {
             bid.multiply(ask).compareTo(BigDecimal.ZERO) <= 0
                 || bidVolume * askVolume <= 0
         ) {
-            logger.log(Level.WARNING, "Prices or volumes can't be less or equal zero: " + line);
+            logger.log(Level.WARNING, () -> "Prices or volumes can't be less or equal zero: " + line);
 
             return null;
         }
 
         if (ticker.isBlank()) {
-            logger.log(Level.WARNING, "Ticker data is empty: " + line);
+            logger.log(Level.WARNING, () -> "Ticker data is empty: " + line);
 
             return null;
         }
