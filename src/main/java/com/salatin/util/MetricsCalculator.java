@@ -11,14 +11,10 @@ public final class MetricsCalculator {
         return (double) bidVolume / (bidVolume + askVolume);
     }
 
-    public static int spread(BigDecimal bid, BigDecimal ask) {
-        int scale = Math.max(bid.scale(), ask.scale());
-
-        BigDecimal tickSize = BigDecimal.valueOf(Math.pow(0.1, scale))
-            .setScale(scale, RoundingMode.HALF_UP);
+    public static int spread(BigDecimal bid, BigDecimal ask, String ticker) {
 
         return ask.subtract(bid)
-            .divide(tickSize, RoundingMode.HALF_UP)
+            .divide(SymbolInfo.TICK_MIN_SIZE.get(ticker), RoundingMode.HALF_UP)
             .intValue();
     }
 }

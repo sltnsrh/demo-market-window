@@ -20,7 +20,7 @@ public class TickProcessor {
         int askVolume = tick.askVolume();
         String ticker = tick.ticker();
 
-        int spread = MetricsCalculator.spread(bid, ask);
+        int spread = MetricsCalculator.spread(bid, ask, ticker);
         double imbalance = MetricsCalculator.bidAskImbalance(bidVolume, askVolume);
         Twap twap = twapWindow.calculateCurrentTick(bid, ask);
 

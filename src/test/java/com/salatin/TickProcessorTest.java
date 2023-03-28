@@ -15,6 +15,8 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 class TickProcessorTest {
+    private final static String BRENT_TICKER = "BRENT";
+
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final TwapWindow twapWindow = Mockito.mock(TwapWindow.class);
 
@@ -35,11 +37,11 @@ class TickProcessorTest {
         var bidVolume = 100;
         var askVolume = 300;
 
-        Tick tick = new Tick("BRENT", bid, bidVolume, ask, askVolume);
+        Tick tick = new Tick(BRENT_TICKER, bid, bidVolume, ask, askVolume);
         TickProcessor tickProcessor = new TickProcessor(twapWindow);
 
         try (MockedStatic<MetricsCalculator> mc = Mockito.mockStatic(MetricsCalculator.class)) {
-            mc.when(() -> MetricsCalculator.spread(bid, ask)).thenReturn(5);
+            mc.when(() -> MetricsCalculator.spread(bid, ask, BRENT_TICKER)).thenReturn(5);
             mc.when(() -> MetricsCalculator.bidAskImbalance(bidVolume, askVolume))
                     .thenReturn(0.25);
 

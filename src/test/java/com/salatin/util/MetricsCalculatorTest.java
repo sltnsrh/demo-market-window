@@ -20,11 +20,11 @@ class MetricsCalculatorTest {
 
     @Test
     void spreadWithValidPricesExpectCorrectSpread() {
-        BigDecimal bid = BigDecimal.valueOf(0.001);
-        BigDecimal ask = BigDecimal.valueOf(0.010);
-        int expected = 9;
+        BigDecimal bid = BigDecimal.valueOf(0.010);
+        BigDecimal ask = BigDecimal.valueOf(0.020);
+        int expected = 10;
 
-        int actual = MetricsCalculator.spread(bid, ask);
+        int actual = MetricsCalculator.spread(bid, ask, "BRENT");
 
         assertEquals(expected, actual);
     }
