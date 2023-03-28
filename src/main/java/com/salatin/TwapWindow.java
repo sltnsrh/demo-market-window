@@ -54,10 +54,6 @@ public class TwapWindow {
     }
 
     private Twap createTickTwap() {
-        if (timeStamps.size() < 2) {
-            return new Twap(BigDecimal.ZERO, BigDecimal.ZERO);
-        }
-
         var timeStampsIterator = timeStamps.descendingIterator();
         var askPricesIterator = askPrices.descendingIterator();
         var bidPricesIterator = bidPrices.descendingIterator();
