@@ -36,7 +36,7 @@ public class CsvStream implements DataStream {
                     tickProcessor.processAndOut(tick);
                 }
                 //Used for simulation of real-time ticks supplying
-                Thread.sleep(random.nextInt(50));
+                Thread.sleep(random.nextInt(20));
             }
 
             logger.log(Level.INFO,

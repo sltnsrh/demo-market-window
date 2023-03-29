@@ -73,7 +73,7 @@ public class TwapWindow {
             if (prevTimeStamp == 0) {
                 deltaTime = (timeStamps.getFirst() - timeStamps.getLast()) / (timeStamps.size() - 1);
             } else {
-                deltaTime = Math.abs(currentTime - prevTimeStamp);
+                deltaTime = currentTime - prevTimeStamp;
             }
 
             prevTimeStamp = currentTime;
