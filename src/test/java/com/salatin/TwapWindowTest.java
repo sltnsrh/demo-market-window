@@ -3,6 +3,7 @@ package com.salatin;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.salatin.model.Twap;
+import com.salatin.processing.TwapWindow;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 

@@ -2,7 +2,7 @@ package com.salatin.input;
 
 import static org.mockito.ArgumentMatchers.any;
 
-import com.salatin.TickProcessor;
+import com.salatin.processing.TickProcessor;
 import com.salatin.model.Tick;
 import com.salatin.util.LineParser;
 import java.math.BigDecimal;

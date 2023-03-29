@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.salatin.model.Tick;
 import com.salatin.model.Twap;
+import com.salatin.processing.TickProcessor;
+import com.salatin.processing.TwapWindow;
 import com.salatin.util.MetricsCalculator;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

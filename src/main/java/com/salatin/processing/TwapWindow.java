@@ -1,4 +1,4 @@
-package com.salatin;
+package com.salatin.processing;
 
 import com.salatin.model.Twap;
 import java.math.BigDecimal;

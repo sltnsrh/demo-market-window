@@ -2,6 +2,8 @@ package com.salatin;
 
 import com.salatin.input.CsvStream;
 import com.salatin.input.DataStream;
+import com.salatin.processing.TickProcessor;
+import com.salatin.processing.TwapWindow;
 
 public class Main {
     public static final String INPUT_FILE = "src/main/resources/BRENT-tick-data-input.csv";

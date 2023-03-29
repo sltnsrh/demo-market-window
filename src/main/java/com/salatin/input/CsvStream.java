@@ -1,7 +1,7 @@
 package com.salatin.input;
 
 import com.salatin.model.Tick;
-import com.salatin.TickProcessor;
+import com.salatin.processing.TickProcessor;
 import com.salatin.util.LineParser;
 import java.io.BufferedReader;
 import java.io.FileReader;
